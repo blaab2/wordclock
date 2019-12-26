@@ -86,7 +86,6 @@ const byte button2Pin = 4;
 
 uint32_t btncheckedtime = 0;
 
-
 int btn1pressed = 0;
 int btn2pressed = 0;
 
@@ -144,12 +143,10 @@ void setup () {
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    ############################################################################################# */
 void loop () {
-
   // Set the current timecode, based on when the performance started
   gTimeCode = millis() - gTimeCodeBase;
 
   Performance();
-
 
   if (DEBUGGING)
   {
@@ -160,13 +157,10 @@ void loop () {
 
     Serial.print("H: ");
     Serial.println(getPotiHue());
-
     Serial.print("S: ");
     Serial.println(getPotiSat());
-
     Serial.print("V: ");
     Serial.println(getPotiV());
-
 
     Serial.print("Podi2: ");
     Serial.println(analogRead(poti2Pin));
