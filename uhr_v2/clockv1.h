@@ -52,8 +52,10 @@ public:
 	static void show(int hours, int minute, int mode);
 	static void setColor(int h, int s, int v);
   static void confettiNames();
+  static void confetti();
     
  };
 
 #endif
+
 

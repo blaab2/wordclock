@@ -9,7 +9,9 @@
 
 #define _clockv1_VERSION 1_0_0 // software version of this library
 
-
+#define names_hueadd_1 60
+#define names_hueadd_2 80
+#define names_satadd 150
 /**
  * Constructor
  */
@@ -39,7 +41,7 @@ void clockv1::showWordClock(int hour, int minute)
     on[4] = 59;
     on[5] = 74;
     on[6] = 89;
-    lightLEDs(on,80,150,0);
+    lightLEDs(on,names_hueadd_1,names_satadd,0);
     
 
     // Julia
@@ -49,7 +51,7 @@ void clockv1::showWordClock(int hour, int minute)
     on[3] = 43;
     on[4] = 58;
     on[5] = 73;
-    lightLEDs(on,60,150,0);
+    lightLEDs(on,names_hueadd_2,names_satadd,0);
   }
 
   if (vers == 1)
@@ -61,7 +63,7 @@ void clockv1::showWordClock(int hour, int minute)
     on[3] = 119;
     on[4] = 134;
     on[5] = 149;
-    lightLEDs(on,80,150,0);
+    lightLEDs(on,names_hueadd_1,names_satadd,0);
      
     // Nadine
     on[0] = 6;
@@ -71,9 +73,17 @@ void clockv1::showWordClock(int hour, int minute)
     on[4] = 56;
     on[5] = 70;
     on[6] = 84;
-    lightLEDs(on,60,150,0);
+    lightLEDs(on,names_hueadd_2,names_satadd,0);
   }
-  
+
+
+
+      if (mode==1)
+    {
+      s = 0;
+      h = 0;
+    } 
+
   
   // Es isch
   on[0] = 6;
@@ -736,8 +746,11 @@ void clockv1::show(int hours, int minutes, int Mode)
   {
     minute1 = 126; //CRGB::Red;
   }
+ 
   if (mode >2)
   {
+    FastLED.clear();
+ 
     showDigitalNumber((int) floor( hours / 10.0),0,0,hour10,0);
     showDigitalNumber( hours % 10,8,0,hour1,0);
     
@@ -746,9 +759,15 @@ void clockv1::show(int hours, int minutes, int Mode)
   }
   else
   {
-    showWordClock(hours, minutes);
+
+     fadeToBlackBy( leds, num_leds, 10);
+     showWordClock(hours, minutes);
     }
-  
+
+
+
+    FastLED.show();
+ 
 }
 
 
@@ -800,6 +819,8 @@ void clockv1::lightLEDs(int* map, int hueadd, int satadd, int mode2)
                 134, 133, 132, 131, 130, 129, 128, 127, 126, 125, 124, 123, 122, 121, 120,
                 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149
                 };
+
+              
     for(int i = 1; i<map[0]+1;i++)
     {
       if (map[i]<255)
@@ -820,11 +841,23 @@ void clockv1::setColor(int H, int S, int V)
   h = H;
   s = S;
   v = V;
-
-  if (mode==1)
-    s=0;
 }
 
+
+void clockv1::confetti() 
+{
+  // random colored speckles that blink in and fade smoothly
+  fadeToBlackBy( leds, num_leds, 10);
+  int pos = random16(num_leds);
+  //leds[pos] += CHSV( gHue-32 + random8(64) , 200, getPodiV());
+  
+  int on2[2];
+  on2[0] = 1;
+  on2[1] = pos;
+  
+
+  lightLEDs(on2, random8(64)-32,0,1);
+}
 
 void clockv1::confettiNames() 
 {
@@ -876,7 +909,7 @@ void clockv1::confettiNames()
   on2[1] = on[pos];
   
 
-  lightLEDs(on2, 50,0,1);
+  lightLEDs(on2, (names_hueadd_1+names_hueadd_2)/2.0f,names_satadd,1);
   //leds[font_map[on[pos]]] += CHSV( gHue-10+70 + random8(20) , getPodiSat(), getPodiV());
   delay(10);
 }
@@ -893,3 +926,4 @@ int clockv1::v = 255;
 int clockv1::mode = 0;
 int clockv1::num_leds = 150;
 CRGB* clockv1::leds;
+
